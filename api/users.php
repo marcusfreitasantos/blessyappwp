@@ -53,7 +53,7 @@ function generateUniqueUsername($username) {
 	}
 }
 
-//GET USERS LIST
+//GET CHURCHES LIST
 function getAllChurches(){
     $allChurches = get_users( array( 'role__in' => array( 'church') ) );
     $allChurchesWithCustomFields = [];
@@ -79,5 +79,44 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'blessyapp/v2', '/church', array(
     'methods' => 'GET',
     'callback' => 'getAllChurches',
+  ) );
+} );
+
+
+//GET CHURCH BY ID
+function getChurchById($reqData){
+	$churchId = $reqData["id"];
+    $currentChurch = get_user_by("id", $churchId);
+
+	if($currentChurch){
+		$churchDescription = get_user_meta($churchId, "church_description", true);
+		$churchAddress = get_user_meta($churchId, "church_address", true);
+		
+		$churchLogoID = get_user_meta($churchId, "church_logo", true);
+		$churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
+	
+			
+		$churchCoverImgID = get_user_meta($churchId, "church_cover_img", true);
+		$churchCoverImg = wp_get_attachment_image_url( $churchCoverImgID, "large" );
+	
+		$churchData = [
+			"id" => $churchId,
+			"name" => $currentChurch->first_name,
+			"address" => $churchAddress,
+			"description" => $churchDescription,
+			"logo" => $churchLogoUrl,
+			"cover_img" => $churchCoverImg
+		];
+	
+		return $churchData;
+	}else{
+		return "User not found";
+	}
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getChurchById',
   ) );
 } );
