@@ -1,5 +1,4 @@
 <?php
-//REGISTER USER
 function registerUsersFromApp($req){
 	$userFullName = $req['userFullName'];
 	$username = generateUniqueUsername($req['username']);
@@ -11,7 +10,7 @@ function registerUsersFromApp($req){
 	
 		if(is_wp_error( $newUserId )){
 			$errorMsg = $newUserId->get_error_message();
-			return "Error: $errorMsg";
+			return new WP_Error( 'not_found', $errorMsg, array( 'status' => 401 ) );
 		
 		}else{
 			wp_update_user( array( 'ID' => $newUserId, 'first_name' => $userFullName ) );
