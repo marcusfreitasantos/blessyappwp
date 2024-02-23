@@ -79,7 +79,8 @@ function getChurchContent($reqData){
   $posts = get_posts(array(
     'post_type' => $postType,
     'author' => $reqData['id'],
-    'post_status' => 'publish'
+    'post_status' => 'publish',
+    'numberposts'      => 50
   ));
 
   $formatedPosts = [];
@@ -90,8 +91,8 @@ function getChurchContent($reqData){
         "id" => $post->ID,
         "churchId" => $post->post_author,
         "postDate" => $post->post_date,
-        "postContent" => $post->post_content,
         "postTitle" => $post->post_title,
+        "postContent" => $post->post_content,
       ];
     }
 
