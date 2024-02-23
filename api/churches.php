@@ -92,7 +92,7 @@ function getChurchContent($reqData){
         "churchId" => $post->post_author,
         "postDate" => $post->post_date,
         "postTitle" => $post->post_title,
-        "postContent" => $post->post_content,
+        "postContent" => sanitize_text_field($post->post_content),
       ];
     }
 
