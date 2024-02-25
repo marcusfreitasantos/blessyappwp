@@ -104,6 +104,14 @@ function getChurchContent($reqData){
 }
 
 
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/(?P<content>[a-z]+)', array(
+    'methods' => 'GET',
+    'callback' => 'getChurchContent',
+  ) );
+} );
+
+
 
 function getChurchContentSingleContent($reqData){
   $postType = $reqData['content'];
