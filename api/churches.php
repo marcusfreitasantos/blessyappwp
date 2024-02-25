@@ -34,6 +34,7 @@ add_action( 'rest_api_init', function () {
 } );
 
 
+
 function getChurchById($reqData){
 	$churchId = $reqData["id"];
     $currentChurch = get_user_by("id", $churchId);
@@ -102,9 +103,33 @@ function getChurchContent($reqData){
   }
 }
 
+
+
+function getChurchContentSingleContent($reqData){
+  $postType = $reqData['content'];
+
+  $contentPost = get_post($reqData['post_id']);
+
+  $formatedPost = [];
+
+  if($contentPost){
+      $formatedPost = [
+        "id" => $contentPost->ID,
+        "churchId" => $contentPost->post_author,
+        "postDate" => $contentPost->post_date,
+        "postTitle" => $contentPost->post_title,
+        "postContent" => sanitize_text_field($contentPost->post_content),
+      ];
+
+    return rest_ensure_response($formatedPost);
+  }else{
+    return new WP_Error( 'not_found', "No $postType found", array( 'status' => 404 ) );
+  }
+}
+
 add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/(?P<content>[a-z]+)', array(
+  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/(?P<content>[a-z]+)/(?P<post_id>\d+)', array(
     'methods' => 'GET',
-    'callback' => 'getChurchContent',
+    'callback' => 'getChurchContentSingleContent',
   ) );
 } );
