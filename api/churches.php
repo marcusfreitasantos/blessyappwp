@@ -113,16 +113,14 @@ add_action( 'rest_api_init', function () {
 
 
 
-function getChurchContentSingleContent($reqData){
-  $postType = $reqData['content'];
-
+function getChurchSingleContent($reqData){
+  $postTypeRequested = $reqData['content'];
+  $currentPostType = get_post_type($reqData['post_id']);
   $contentPost = get_post($reqData['post_id']);  
 
-  $formatedPost = [];
-
-  if($contentPost){
+  if($contentPost && ($currentPostType === $postTypeRequested)){
       $paragraphsGroup = get_field('paragraph_group', $contentPost->ID);
-      
+      $formatedPost = [];
       $paragraphs = [];
 
       if($paragraphsGroup){
@@ -137,18 +135,18 @@ function getChurchContentSingleContent($reqData){
         "postDate" => $contentPost->post_date,
         "postTitle" => $contentPost->post_title,
         "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $contentPost->ID)),
-        "postContent" => $paragraphs
+        "postContent" => $paragraphs,
       ];
 
     return rest_ensure_response($formatedPost);
   }else{
-    return new WP_Error( 'not_found', "No $postType found", array( 'status' => 404 ) );
+    return new WP_Error( 'not_found', "No $postTypeRequested found", array( 'status' => 404 ) );
   }
 }
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/(?P<content>[a-z]+)/(?P<post_id>\d+)', array(
     'methods' => 'GET',
-    'callback' => 'getChurchContentSingleContent',
+    'callback' => 'getChurchSingleContent',
   ) );
 } );
