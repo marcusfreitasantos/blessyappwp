@@ -93,7 +93,7 @@ function getChurchContent($reqData){
         "churchId" => $post->post_author,
         "postDate" => $post->post_date,
         "postTitle" => $post->post_title,
-        "postContent" => sanitize_text_field($post->post_content),
+        "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
       ];
     }
 
@@ -116,17 +116,28 @@ add_action( 'rest_api_init', function () {
 function getChurchContentSingleContent($reqData){
   $postType = $reqData['content'];
 
-  $contentPost = get_post($reqData['post_id']);
+  $contentPost = get_post($reqData['post_id']);  
 
   $formatedPost = [];
 
   if($contentPost){
+      $paragraphsGroup = get_field('paragraph_group', $contentPost->ID);
+      
+      $paragraphs = [];
+
+      if($paragraphsGroup){
+        foreach($paragraphsGroup as $paragraphGroup){
+          $paragraphs[] = $paragraphGroup;
+        }
+      }
+
       $formatedPost = [
         "id" => $contentPost->ID,
         "churchId" => $contentPost->post_author,
         "postDate" => $contentPost->post_date,
         "postTitle" => $contentPost->post_title,
-        "postContent" => sanitize_text_field($contentPost->post_content),
+        "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $contentPost->ID)),
+        "postContent" => $paragraphs
       ];
 
     return rest_ensure_response($formatedPost);
