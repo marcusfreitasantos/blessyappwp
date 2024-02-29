@@ -88,7 +88,7 @@ function getChurchContent($reqData){
 
   if($posts){
     foreach($posts as $post){
-      $formatDate = date_i18n("d F Y", strtotime($post->post_date));
+      $formatDate = date_i18n("d \d\\e F, Y", strtotime($post->post_date));
       $formatedPosts[] = [
         "id" => $post->ID,
         "churchId" => $post->post_author,
@@ -123,7 +123,7 @@ function getChurchSingleContent($reqData){
       $paragraphsGroup = get_field('paragraph_group', $contentPost->ID);
       $formatedPost = [];
       $paragraphs = [];
-      $formatDate = date_i18n("d F Y", strtotime($contentPost->post_date));
+      $formatDate = date_i18n("d \d\\e F, Y", strtotime($contentPost->post_date));
 
       if($paragraphsGroup){
         foreach($paragraphsGroup as $paragraphGroup){
