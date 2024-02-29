@@ -88,10 +88,11 @@ function getChurchContent($reqData){
 
   if($posts){
     foreach($posts as $post){
+      $formatDate = date_i18n("d F Y", strtotime($post->post_date));
       $formatedPosts[] = [
         "id" => $post->ID,
         "churchId" => $post->post_author,
-        "postDate" => $post->post_date,
+        "postDate" => $formatDate,
         "postTitle" => $post->post_title,
         "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
       ];
@@ -122,6 +123,7 @@ function getChurchSingleContent($reqData){
       $paragraphsGroup = get_field('paragraph_group', $contentPost->ID);
       $formatedPost = [];
       $paragraphs = [];
+      $formatDate = date_i18n("d F Y", strtotime($contentPost->post_date));
 
       if($paragraphsGroup){
         foreach($paragraphsGroup as $paragraphGroup){
@@ -132,7 +134,7 @@ function getChurchSingleContent($reqData){
       $formatedPost = [
         "id" => $contentPost->ID,
         "churchId" => $contentPost->post_author,
-        "postDate" => $contentPost->post_date,
+        "postDate" => $formatDate,
         "postTitle" => $contentPost->post_title,
         "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $contentPost->ID)),
         "postContent" => $paragraphs,
