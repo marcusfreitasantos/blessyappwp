@@ -89,13 +89,34 @@ function getChurchContent($reqData){
   if($posts){
     foreach($posts as $post){
       $formatDate = date_i18n("d \d\\e F, Y", strtotime($post->post_date));
-      $formatedPosts[] = [
-        "id" => $post->ID,
-        "churchId" => $post->post_author,
-        "postDate" => $formatDate,
-        "postTitle" => $post->post_title,
-        "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
-      ];
+
+
+      if($postType === "event"){
+        $formatedPosts[] = [
+          "id" => $post->ID,
+          "churchId" => $post->post_author,
+          "postDate" => $formatDate,
+          "postTitle" => $post->post_title,
+          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
+          "eventStartDate" => get_field('event_start_date',$post->ID),
+          "eventEndDate" => get_field('event_end_date',$post->ID),
+          "eventTime" => get_field('event_time',$post->ID),
+          "eventAddress" => get_field('event_address',$post->ID),
+          "eventEntranceType" => get_field('event_entrance_type',$post->ID),
+          "eventEntranceValue" => get_field('event_entrance_value',$post->ID),
+          "eventLink" => get_field('event_link',$post->ID)
+        ];
+
+      }else{
+        $formatedPosts[] = [
+          "type" => $postType,
+          "id" => $post->ID,
+          "churchId" => $post->post_author,
+          "postDate" => $formatDate,
+          "postTitle" => $post->post_title,
+          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
+        ];
+      }
     }
 
     return rest_ensure_response($formatedPosts);
@@ -131,14 +152,33 @@ function getChurchSingleContent($reqData){
         }
       }
 
-      $formatedPost = [
-        "id" => $contentPost->ID,
-        "churchId" => $contentPost->post_author,
-        "postDate" => $formatDate,
-        "postTitle" => $contentPost->post_title,
-        "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $contentPost->ID)),
-        "postContent" => $paragraphs,
-      ];
+      if($postTypeRequested === 'event'){
+        $formatedPost = [
+          "id" => $contentPost->ID,
+          "churchId" => $contentPost->post_author,
+          "postDate" => $formatDate,
+          "postTitle" => $contentPost->post_title,
+          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $contentPost->ID)),
+          "eventStartDate" => get_field('event_start_date',$contentPost->ID),
+          "eventEndDate" => get_field('event_end_date',$contentPost->ID),
+          "eventTime" => get_field('event_time',$contentPost->ID),
+          "eventAddress" => get_field('event_address',$contentPost->ID),
+          "eventEntranceType" => get_field('event_entrance_type',$contentPost->ID),
+          "eventEntranceValue" => get_field('event_entrance_value',$contentPost->ID),
+          "eventLink" => get_field('event_link',$contentPost->ID)
+        ];
+
+      }else{
+        $formatedPost = [
+          "id" => $contentPost->ID,
+          "churchId" => $contentPost->post_author,
+          "postDate" => $formatDate,
+          "postTitle" => $contentPost->post_title,
+          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $contentPost->ID)),
+          "postContent" => $paragraphs,
+        ];
+      }
+
 
     return rest_ensure_response($formatedPost);
   }else{
