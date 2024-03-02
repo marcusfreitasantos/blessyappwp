@@ -109,7 +109,6 @@ function getChurchContent($reqData){
 
       }else{
         $formatedPosts[] = [
-          "type" => $postType,
           "id" => $post->ID,
           "churchId" => $post->post_author,
           "postDate" => $formatDate,
