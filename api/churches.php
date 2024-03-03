@@ -1,5 +1,11 @@
 <?php
 
+function customFormatDate($date){
+  $formatDate = date_i18n("d \d\\e F, Y", strtotime($date));
+
+  return $formatDate;
+}
+
 function getAllChurches(){
     $allChurches = get_users( array( 'role__in' => array( 'church') ) );
     $allChurchesWithCustomFields = [];
@@ -88,18 +94,18 @@ function getChurchContent($reqData){
 
   if($posts){
     foreach($posts as $post){
-      $formatDate = date_i18n("d \d\\e F, Y", strtotime($post->post_date));
+      
 
 
       if($postType === "event"){
         $formatedPosts[] = [
           "id" => $post->ID,
           "churchId" => $post->post_author,
-          "postDate" => $formatDate,
+          "postDate" => customFormatDate($post->post_date),
           "postTitle" => $post->post_title,
           "postExcerpt" => sanitize_text_field(get_field('event_excerpt', $post->ID)),
-          "eventStartDate" => get_field('event_start_date',$post->ID),
-          "eventEndDate" => get_field('event_end_date',$post->ID),
+          "eventStartDate" => customFormatDate(get_field('event_start_date',$post->ID)),
+          "eventEndDate" => customFormatDate(get_field('event_end_date',$post->ID)),
           "eventTime" => get_field('event_time',$post->ID),
           "eventAddress" => get_field('event_address',$post->ID),
           "eventEntranceType" => get_field('event_entrance_type',$post->ID),
@@ -111,7 +117,7 @@ function getChurchContent($reqData){
         $formatedPosts[] = [
           "id" => $post->ID,
           "churchId" => $post->post_author,
-          "postDate" => $formatDate,
+          "postDate" => customFormatDate($post->post_date),
           "postTitle" => $post->post_title,
           "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
         ];
@@ -137,13 +143,13 @@ add_action( 'rest_api_init', function () {
 function getChurchSingleContent($reqData){
   $postTypeRequested = $reqData['content'];
   $currentPostType = get_post_type($reqData['post_id']);
-  $contentPost = get_post($reqData['post_id']);  
+  $post = get_post($reqData['post_id']);  
 
-  if($contentPost && ($currentPostType === $postTypeRequested)){
-      $paragraphsGroup = get_field('paragraph_group', $contentPost->ID);
+  if($post && ($currentPostType === $postTypeRequested)){
+      $paragraphsGroup = get_field('paragraph_group', $post->ID);
       $formatedPost = [];
       $paragraphs = [];
-      $formatDate = date_i18n("d \d\\e F, Y", strtotime($contentPost->post_date));
+      
 
       if($paragraphsGroup){
         foreach($paragraphsGroup as $paragraphGroup){
@@ -153,28 +159,28 @@ function getChurchSingleContent($reqData){
 
       if($postTypeRequested === 'event'){
         $formatedPost = [
-          "id" => $contentPost->ID,
-          "churchId" => $contentPost->post_author,
-          "postDate" => $formatDate,
-          "postTitle" => $contentPost->post_title,
-          "postExcerpt" => sanitize_text_field(get_field('event_excerpt', $contentPost->ID)),
+          "id" => $post->ID,
+          "churchId" => $post->post_author,
+          "postDate" => customFormatDate($post->post_date),
+          "postTitle" => $post->post_title,
+          "postExcerpt" => sanitize_text_field(get_field('event_excerpt', $post->ID)),
           "postContent" => $paragraphs,
-          "eventStartDate" => get_field('event_start_date',$contentPost->ID),
-          "eventEndDate" => get_field('event_end_date',$contentPost->ID),
-          "eventTime" => get_field('event_time',$contentPost->ID),
-          "eventAddress" => get_field('event_address',$contentPost->ID),
-          "eventEntranceType" => get_field('event_entrance_type',$contentPost->ID),
-          "eventEntranceValue" => get_field('event_entrance_value',$contentPost->ID),
-          "eventLink" => get_field('event_link',$contentPost->ID)
+          "eventStartDate" => customFormatDate(get_field('event_start_date',$post->ID)),
+          "eventEndDate" => customFormatDate(get_field('event_end_date',$post->ID)),
+          "eventTime" => get_field('event_time',$post->ID),
+          "eventAddress" => get_field('event_address',$post->ID),
+          "eventEntranceType" => get_field('event_entrance_type',$post->ID),
+          "eventEntranceValue" => get_field('event_entrance_value',$post->ID),
+          "eventLink" => get_field('event_link',$post->ID)
         ];
 
       }else{
         $formatedPost = [
-          "id" => $contentPost->ID,
-          "churchId" => $contentPost->post_author,
-          "postDate" => $formatDate,
-          "postTitle" => $contentPost->post_title,
-          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $contentPost->ID)),
+          "id" => $post->ID,
+          "churchId" => $post->post_author,
+          "postDate" => customFormatDate($post->post_date),
+          "postTitle" => $post->post_title,
+          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
           "postContent" => $paragraphs,
         ];
       }
