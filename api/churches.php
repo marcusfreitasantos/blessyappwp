@@ -93,9 +93,6 @@ function getChurchContent($reqData){
 
   if($posts){
     foreach($posts as $post){
-      
-
-
       if($postType === "event"){
         $formatedPosts[] = [
           "id" => $post->ID,
