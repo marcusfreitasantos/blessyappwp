@@ -51,3 +51,28 @@ function generateUniqueUsername($username) {
 		return call_user_func( __FUNCTION__, $username );
 	}
 }
+
+
+function getUserByEmail($req){
+	$user = get_user_by('email', $req['email']);
+	$userObj = [];
+
+	if($user){
+		$userObj = [
+			"ID" => $user->ID,
+			"firstName" => $user->first_name,
+			"lastName" => $user->last_name,
+			"email" => $user->user_email,
+		];
+		return rest_ensure_response($userObj);
+	}else{
+		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
+	}
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/users/(?P<email>\S+)', array(
+    'methods' => 'GET',
+    'callback' => 'getUserByEmail',
+  ) );
+} );

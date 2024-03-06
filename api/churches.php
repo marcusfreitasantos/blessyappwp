@@ -2,7 +2,6 @@
 
 function customFormatDate($date){
   $formatDate = date_i18n("d \d\\e F, Y", strtotime($date));
-
   return $formatDate;
 }
 
