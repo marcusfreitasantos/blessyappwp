@@ -64,3 +64,28 @@ function sendUserDataAfterJWTAuth($jwt, $user){
 	return $data;
 }
 add_filter('jwt_auth_token_before_dispatch', 'sendUserDataAfterJWTAuth', 10, 2);
+
+
+function updateUserById(){
+	$reqBody = json_decode(file_get_contents('php://input'));
+	$userData = wp_update_user([
+		'ID' => $reqBody->id,
+		'user_email' => $reqBody->email,
+		'first_name' => $reqBody->firstName,
+		'last_name' => $reqBody->lastName,
+		'user_pass' => $reqBody->password,
+	]);
+
+	if ( is_wp_error( $userData ) ) {
+    	return new WP_Error( 'not_found', "User couldn't be updated.", array( 'status' => 404 ) );
+	} else {
+		return rest_ensure_response('User profile updated.');
+	}
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)', array(
+    'methods' => 'POST',
+    'callback' => 'updateUserById',
+  ) );
+} );
