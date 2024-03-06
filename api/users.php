@@ -66,10 +66,10 @@ function sendUserDataAfterJWTAuth($jwt, $user){
 add_filter('jwt_auth_token_before_dispatch', 'sendUserDataAfterJWTAuth', 10, 2);
 
 
-function updateUserById(){
+function updateUserById($req){
 	$reqBody = json_decode(file_get_contents('php://input'));
 	$userData = wp_update_user([
-		'ID' => $reqBody->id,
+		'ID' => $req['id'],
 		'user_email' => $reqBody->email,
 		'first_name' => $reqBody->firstName,
 		'last_name' => $reqBody->lastName,
