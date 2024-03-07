@@ -70,9 +70,9 @@ function updateUserById($req){
 	$reqBody = json_decode(file_get_contents('php://input'));
 	$userData = [
 		'ID' => $req['id'],
-		'user_email' => $reqBody->userEmail,
-		'first_name' => $reqBody->userFirstName,
-		'last_name' => $reqBody->userLastName,
+		'user_email' => $reqBody->email,
+		'first_name' => $reqBody->firstName,
+		'last_name' => $reqBody->lastName,
 		'user_pass' => $reqBody->userPass,
 	];
 
