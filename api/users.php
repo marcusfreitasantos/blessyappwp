@@ -81,9 +81,9 @@ function updateUserById($req){
 	} else {
 		$userNewData = [
 			'userID' => $req['id'],
-			'email' => $reqBody->userEmail,
-			'firstName' => $reqBody->userFirstName,
-			'lastName' => $reqBody->userLastName,
+			'email' => $reqBody->email,
+			'firstName' => $reqBody->firstName,
+			'lastName' => $reqBody->lastName,
 		];
 		return rest_ensure_response($userNewData);
 	}
