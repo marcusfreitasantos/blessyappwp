@@ -54,12 +54,14 @@ function generateUniqueUsername($username) {
 
 
 function sendUserDataAfterJWTAuth($jwt, $user){
+    $userAvatarUrl = wp_get_attachment_image_url( get_user_meta($user->ID, "avatar", true), "medium" );
 	$data = array(
 		'token' => $jwt['token'],
 		'userID' => $user->ID,
 		'email' => $user->user_email,
 		'firstName' => $user->first_name,
 		'lastName' => $user->last_name,
+		'avatar' => $userAvatarUrl
 	);
 	return $data;
 }
