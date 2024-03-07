@@ -68,18 +68,24 @@ add_filter('jwt_auth_token_before_dispatch', 'sendUserDataAfterJWTAuth', 10, 2);
 
 function updateUserById($req){
 	$reqBody = json_decode(file_get_contents('php://input'));
-	$userData = wp_update_user([
+	$userData = [
 		'ID' => $req['id'],
 		'user_email' => $reqBody->userEmail,
 		'first_name' => $reqBody->userFirstName,
 		'last_name' => $reqBody->userLastName,
 		'user_pass' => $reqBody->userPass,
-	]);
+	];
 
-	if ( is_wp_error( $userData ) ) {
+	if ( is_wp_error( wp_update_user($userData) ) ) {
     	return new WP_Error( 'not_found', "User couldn't be updated.", array( 'status' => 404 ) );
 	} else {
-		return rest_ensure_response('User profile updated.');
+		$userNewData = [
+			'userID' => $req['id'],
+			'email' => $reqBody->userEmail,
+			'firstName' => $reqBody->userFirstName,
+			'lastName' => $reqBody->userLastName,
+		];
+		return rest_ensure_response($userNewData);
 	}
 }
 
