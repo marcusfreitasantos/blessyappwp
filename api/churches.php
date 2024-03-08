@@ -194,3 +194,37 @@ add_action( 'rest_api_init', function () {
     'callback' => 'getChurchSingleContent',
   ) );
 } );
+
+
+function searchChurchByKeyword($req){
+  $keyword = $req['keyword'];
+  $churchesFound = get_users( array( 'search' => "$keyword*" ));
+  $formatedChurchesFound = [];
+
+  if($churchesFound){
+    foreach($churchesFound as $church){
+      $churchAddress = get_user_meta($church->id, "church_address", true);
+      $churchLogoID = get_user_meta($church->id, "church_logo", true);
+      $churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
+
+      $formatedChurchesFound[] = [
+          "id" => $church->id,
+          "name" => $church->first_name,
+          "address" => $churchAddress,
+          "logo" => $churchLogoUrl
+      ];
+    }
+
+
+    return rest_ensure_response($formatedChurchesFound);
+  }else{
+    return new WP_Error( 'not_found', "No churches found", array( 'status' => 404 ) );
+  }
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/church/(?P<keyword>[a-zA-Z0-9]+)', array(
+    'methods' => 'GET',
+    'callback' => 'searchChurchByKeyword',
+  ) );
+} );
