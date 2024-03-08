@@ -223,7 +223,7 @@ function searchChurchByKeyword($req){
 }
 
 add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<keyword>[a-zA-Z0-9]+)', array(
+  register_rest_route( 'blessyapp/v2', '/church/search/(?P<keyword>[a-zA-Z0-9]+)', array(
     'methods' => 'GET',
     'callback' => 'searchChurchByKeyword',
   ) );
