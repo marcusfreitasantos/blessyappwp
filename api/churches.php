@@ -198,7 +198,7 @@ add_action( 'rest_api_init', function () {
 
 function searchChurchByKeyword($req){
   $keyword = $req['keyword'];
-  $churchesFound = get_users( array( 'search' => "$keyword*" ));
+  $churchesFound = get_users( array( 'search' => "$keyword*", 'role__in' => ['church'] ));
   $formatedChurchesFound = [];
 
   if($churchesFound){
