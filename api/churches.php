@@ -228,3 +228,76 @@ add_action( 'rest_api_init', function () {
     'callback' => 'searchChurchByKeyword',
   ) );
 } );
+
+
+
+function searchChurchByMetadata($req){
+  $churchName = $req['church_name'];
+  $churchState = $req['church_state'];
+  $churchCity = $req['church_city'];
+  $churchAddress = $req['church_address'];
+
+  $metaQueryArgs = array(
+      'relation' => 'AND',
+  );
+
+  if($churchState){
+    $metaQueryArgs[] = [
+        'key'     => 'church_state',
+        'value'   => "$churchState",
+        'compare' => '=', 
+    ];
+  }
+
+  if($churchCity){
+    $metaQueryArgs[] = [
+        'key'     => 'church_city',
+        'value'   => "$churchCity",
+        'compare' => '=', 
+    ];
+  }
+
+  if($churchAddress){
+    $metaQueryArgs[] = [
+        'key'     => 'church_address',
+        'value'   => "$churchAddress",
+        'compare' => '=', 
+    ];
+  }
+
+  $churchesFound = get_users([
+    'role__in' => ['church'],
+    'search' => $churchName,
+    'meta_query' => $metaQueryArgs
+  ]);
+
+  $formatedChurchesFound = [];
+
+  if($churchesFound){
+    foreach($churchesFound as $church){
+      $churchAddress = get_user_meta($church->id, "church_address", true);
+      $churchLogoID = get_user_meta($church->id, "church_logo", true);
+      $churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
+
+      $formatedChurchesFound[] = [
+          "id" => $church->id,
+          "name" => $church->first_name,
+          "address" => $churchAddress,
+          "logo" => $churchLogoUrl
+      ];
+    }
+
+
+    return rest_ensure_response($formatedChurchesFound);
+  }else{
+    return new WP_Error( 'not_found', "No churches found", array( 'status' => 404 ) );
+  }
+
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/church/searchbymeta', array(
+    'methods' => 'GET',
+    'callback' => 'searchChurchByMetadata',
+  ) );
+} );
