@@ -267,7 +267,7 @@ function searchChurchByMetadata($req){
 
   $churchesFound = get_users([
     'role__in' => ['church'],
-    'search' => $churchName,
+    'search' => "$churchName*",
     'meta_query' => $metaQueryArgs
   ]);
 
