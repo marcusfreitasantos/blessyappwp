@@ -1,5 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home4/mafrei65/blessyapp.com/wp-content/themes/blessyapp
-    - /bin/cp -R * $DEPLOYPATH
