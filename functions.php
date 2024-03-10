@@ -31,6 +31,6 @@ function oceanwp_child_enqueue_parent_style() {
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_parent_style' );
 
 
-
+//AUTO DEPLOY TEST
 require_once("api/users.php");
 require_once("api/churches.php");
