@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=${{ secrets.BLESSYAPP_THEME_DIRECTORY }}
+    - /bin/cp -R * $DEPLOYPATH
