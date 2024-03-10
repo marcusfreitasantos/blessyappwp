@@ -106,12 +106,35 @@ add_action( 'rest_api_init', function () {
 function getUserBookmarks($req){
 	$userId = $req['id'];
 	$userBookmarkedChurches = get_user_meta($userId, 'user_bookmarked_churches', true);
-	
-	if($userBookmarkedChurches){
-		return rest_ensure_response($userBookmarkedChurches);
-	}else{
-		return new WP_Error( 'not_found', "No bookmarks found.", array( 'status' => 404 ) );
-	}
+	$allChurches = [];
+	$allChurchesWithCustomFields = [];
+
+	foreach($userBookmarkedChurches as $churchId){
+		$currentUserBookmarkedChurch = get_user_by('id', $churchId);
+		if($currentUserBookmarkedChurch){
+			$allChurches[] = get_user_by('id', $churchId);
+		}
+	}	
+
+    if($allChurches){
+      foreach($allChurches as $church){
+          $churchAddress = get_user_meta($church->id, "church_address", true);
+          $churchLogoID = get_user_meta($church->id, "church_logo", true);
+          $churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
+  
+          $allChurchesWithCustomFields[] = [
+              "id" => $church->id,
+              "name" => $church->first_name,
+              "address" => $churchAddress,
+              "logo" => $churchLogoUrl
+          ];
+  
+      }
+  
+      return rest_ensure_response($allChurchesWithCustomFields);
+    }else{
+      return new WP_Error( 'not_found', 'No churches found.', array( 'status' => 404 ) );
+    }
 }
 
 
@@ -180,7 +203,7 @@ function removeUserChurchBookmarks($req){
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/bookmark', array(
-    'methods' => 'PUT',
+    'methods' => 'DELETE',
     'callback' => 'removeUserChurchBookmarks',
   ) );
 } );

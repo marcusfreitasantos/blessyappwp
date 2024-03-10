@@ -28,7 +28,6 @@ function getAllChurches(){
     }else{
       return new WP_Error( 'not_found', 'No churches found.', array( 'status' => 404 ) );
     }
-
 }
 
 add_action( 'rest_api_init', function () {
