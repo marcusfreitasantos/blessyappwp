@@ -130,17 +130,16 @@ function saveUserBookmarks($req){
 	if(get_user_by('id', $userId)){
 		$userBookmarkedChurches = get_user_meta($userId, 'user_bookmarked_churches', true);
 		if($userBookmarkedChurches){
-			foreach($userBookmarkedChurches as $churchId){
-				if(!in_array($reqBody->churchId, $userBookmarkedChurches)){
-					$userBookmarkedChurches[] =  $reqBody->churchId;
-				}
-			}		
+			if(!in_array($reqBody->churchId, $userBookmarkedChurches)){
+				$userBookmarkedChurches[] =  $reqBody->churchId;
+			}
+				
 		}else{
 			$userBookmarkedChurches = [$reqBody->churchId];
 		}
 
 		update_user_meta($userId, 'user_bookmarked_churches', $userBookmarkedChurches);
-		rest_ensure_response($userBookmarkedChurches);
+		return rest_ensure_response($userBookmarkedChurches);
 	}else{
 		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
 	}
