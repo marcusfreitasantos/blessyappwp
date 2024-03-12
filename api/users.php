@@ -177,9 +177,8 @@ add_action( 'rest_api_init', function () {
 } );
 
 
-function removeUserChurchBookmarks($req){
+function removeUserBookmarks($req){
 	$userId = $req['id'];
-	$reqBody = json_decode(file_get_contents('php://input'));
 	
 	if(get_user_by('id', $userId)){
 		$userBookmarkedChurches = get_user_meta($userId, 'user_bookmarked_churches', true);
@@ -187,12 +186,13 @@ function removeUserChurchBookmarks($req){
 
 		if($userBookmarkedChurches){
 			foreach ($userBookmarkedChurches as $churchId) {
-				if($churchId !== $reqBody->churchId){
+				if($churchId !== intval($req['church_id'])){
 					$newUserBookmarkedChurches[] = $churchId;
 				}
 			}
 			
 			update_user_meta($userId, 'user_bookmarked_churches', $newUserBookmarkedChurches);
+			
 			return rest_ensure_response($newUserBookmarkedChurches);
 		}
 	}else{
@@ -202,8 +202,8 @@ function removeUserChurchBookmarks($req){
 
 
 add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/bookmark', array(
+  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/bookmark/(?P<church_id>\d+)', array(
     'methods' => 'DELETE',
-    'callback' => 'removeUserChurchBookmarks',
+    'callback' => 'removeUserBookmarks',
   ) );
 } );
