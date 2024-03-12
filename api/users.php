@@ -55,6 +55,8 @@ function generateUniqueUsername($username) {
 
 function sendUserDataAfterJWTAuth($jwt, $user){
     $userAvatarUrl = wp_get_attachment_image_url( get_user_meta($user->ID, "avatar", true), "medium" );
+	$userBookmarks = get_user_meta($user->ID, 'user_bookmarked_churches', true);
+
 	if(!in_array('church', $user->roles)){
 		$data = array(
 			'token' => $jwt['token'],
@@ -62,7 +64,8 @@ function sendUserDataAfterJWTAuth($jwt, $user){
 			'email' => $user->user_email,
 			'firstName' => $user->first_name,
 			'lastName' => $user->last_name,
-			'avatar' => $userAvatarUrl
+			'avatar' => $userAvatarUrl,
+			'bookmarks' => $userBookmarks
 		);
 		return $data;
 	}else{
