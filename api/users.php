@@ -119,7 +119,7 @@ function getUserBookmarks($req){
 		}
 	}	
 
-    if($allChurches){
+    if(get_user_by('id', $req['id'])){
       foreach($allChurches as $church){
           $churchAddress = get_user_meta($church->id, "church_address", true);
           $churchLogoID = get_user_meta($church->id, "church_logo", true);
@@ -136,7 +136,7 @@ function getUserBookmarks($req){
   
       return rest_ensure_response($allChurchesWithCustomFields);
     }else{
-      return new WP_Error( 'not_found', 'No churches found.', array( 'status' => 404 ) );
+      return new WP_Error( 'not_found', 'User not found.', array( 'status' => 404 ) );
     }
 }
 
