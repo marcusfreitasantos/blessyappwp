@@ -13,15 +13,16 @@ function getAllChurches(){
       foreach($allChurches as $church){
           $churchAddress = get_user_meta($church->id, "church_address", true);
           $churchLogoID = get_user_meta($church->id, "church_logo", true);
+          $churchCurrentFollowers = get_user_meta($church->id, "church_current_followers", true);
           $churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
   
           $allChurchesWithCustomFields[] = [
               "id" => $church->id,
               "name" => $church->first_name,
               "address" => $churchAddress,
-              "logo" => $churchLogoUrl
-          ];
-  
+              "logo" => $churchLogoUrl,
+              "totalFollowers" => sizeof($churchCurrentFollowers)
+          ];  
       }
   
       return rest_ensure_response($allChurchesWithCustomFields);
@@ -46,8 +47,8 @@ function getChurchById($reqData){
 	if($currentChurch){
 		$churchDescription = get_user_meta($churchId, "church_description", true);
 		$churchAddress = get_user_meta($churchId, "church_address", true);
-		
 		$churchLogoID = get_user_meta($churchId, "church_logo", true);
+    $churchCurrentFollowers = get_user_meta($churchId, "church_current_followers", true);
 		$churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
 	
 			
@@ -60,7 +61,8 @@ function getChurchById($reqData){
 			"address" => $churchAddress,
 			"description" => $churchDescription,
 			"logo" => $churchLogoUrl,
-			"coverImg" => $churchCoverImg
+			"coverImg" => $churchCoverImg,
+      "totalFollowers" => sizeof($churchCurrentFollowers)
 		];
 	
 		return rest_ensure_response($churchData);
@@ -127,7 +129,7 @@ function getChurchContent($reqData){
 
 
 add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/(?P<content>[a-z]+)', array(
+  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/content/(?P<content>[a-z]+)', array(
     'methods' => 'GET',
     'callback' => 'getChurchContent',
   ) );
@@ -188,7 +190,7 @@ function getChurchSingleContent($reqData){
 }
 
 add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/(?P<content>[a-z]+)/(?P<post_id>\d+)', array(
+  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/content/(?P<content>[a-z]+)/(?P<post_id>\d+)', array(
     'methods' => 'GET',
     'callback' => 'getChurchSingleContent',
   ) );
@@ -327,3 +329,32 @@ function removeChurchFollowers($userId, $churchId){
     update_user_meta($churchId, 'church_current_followers', $newCurrentChurchFollowers);
   }
 }
+
+
+function getAllChurchFollowers($req){
+  $currentChurch = get_user_by('id', $req['id']);
+  $churchCurrentFollowersObj = [];
+
+  if($currentChurch && in_array('church', $currentChurch->roles)){
+    $churchCurrentFollowers = get_user_meta($req['id'], 'church_current_followers', true);
+
+    $churchCurrentFollowersObj[] = [
+      "followers" => $churchCurrentFollowers,
+      "total" => sizeof($churchCurrentFollowers)
+    ];
+  
+    return $churchCurrentFollowersObj;
+   
+  }else{
+    return new WP_Error( 'not_found', "No church found with this ID.", array( 'status' => 404 ) );
+  }
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/followers', array(
+    'methods' => 'GET',
+    'callback' => 'getAllChurchFollowers',
+  ) );
+} );
+
+
