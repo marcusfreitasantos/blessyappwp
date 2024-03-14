@@ -21,7 +21,7 @@ function getAllChurches(){
               "name" => $church->first_name,
               "address" => $churchAddress,
               "logo" => $churchLogoUrl,
-              "totalFollowers" => sizeof($churchCurrentFollowers)
+              "totalFollowers" => $churchCurrentFollowers ? sizeof($churchCurrentFollowers) : 0
           ];  
       }
   
@@ -62,7 +62,7 @@ function getChurchById($reqData){
 			"description" => $churchDescription,
 			"logo" => $churchLogoUrl,
 			"coverImg" => $churchCoverImg,
-      "totalFollowers" => sizeof($churchCurrentFollowers)
+      "totalFollowers" => $churchCurrentFollowers ? sizeof($churchCurrentFollowers) : 0
 		];
 	
 		return rest_ensure_response($churchData);
