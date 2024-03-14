@@ -305,11 +305,25 @@ add_action( 'rest_api_init', function () {
 function saveChurchFollowers($userId, $churchId){
   $currentChurchFollowers = get_user_meta($churchId, 'church_current_followers', true);
 
-  if($currentChurchFollowers){
+  if($currentChurchFollowers && !in_array($userId, $currentChurchFollowers)){
     $currentChurchFollowers[] =  intval($userId);
     update_user_meta($churchId, 'church_current_followers', $currentChurchFollowers);
   }else{
     $newCurrentChurchFollowers = [intval($userId)];
+    update_user_meta($churchId, 'church_current_followers', $newCurrentChurchFollowers);
+  }
+}
+
+function removeChurchFollowers($userId, $churchId){
+  $currentChurchFollowers = get_user_meta($churchId, 'church_current_followers', true);
+  $newCurrentChurchFollowers = [];
+
+  if($currentChurchFollowers && in_array($userId, $currentChurchFollowers)){
+    foreach($currentChurchFollowers as $churchFollowerId){
+      	if($churchFollowerId !== intval($userId)){
+					$newCurrentChurchFollowers[] = $churchFollowerId;
+				}
+    }
     update_user_meta($churchId, 'church_current_followers', $newCurrentChurchFollowers);
   }
 }

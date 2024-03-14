@@ -196,7 +196,7 @@ function removeUserBookmarks($req){
 			}
 			
 			update_user_meta($userId, 'user_bookmarked_churches', $newUserBookmarkedChurches);
-			
+			removeChurchFollowers($userId, $req['church_id']);			
 			return rest_ensure_response($newUserBookmarkedChurches);
 		}
 	}else{
