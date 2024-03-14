@@ -300,3 +300,16 @@ add_action( 'rest_api_init', function () {
     'callback' => 'searchChurchByMetadata',
   ) );
 } );
+
+
+function saveChurchFollowers($userId, $churchId){
+  $currentChurchFollowers = get_user_meta($churchId, 'church_current_followers', true);
+
+  if($currentChurchFollowers){
+    $currentChurchFollowers[] =  intval($userId);
+    update_user_meta($churchId, 'church_current_followers', $currentChurchFollowers);
+  }else{
+    $newCurrentChurchFollowers = [intval($userId)];
+    update_user_meta($churchId, 'church_current_followers', $newCurrentChurchFollowers);
+  }
+}

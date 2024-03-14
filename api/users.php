@@ -165,6 +165,7 @@ function saveUserBookmarks($req){
 		}
 
 		update_user_meta($userId, 'user_bookmarked_churches', $userBookmarkedChurches);
+		saveChurchFollowers($userId, intval($reqBody->churchId));
 		return rest_ensure_response($userBookmarkedChurches);
 	}else{
 		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
