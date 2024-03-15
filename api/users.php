@@ -211,3 +211,34 @@ add_action( 'rest_api_init', function () {
     'callback' => 'removeUserBookmarks',
   ) );
 } );
+
+
+function saveUserDeviceToken($req) {
+	$userId = $req['id'];
+	$currentUser = get_user_by('id', $userId);
+	$userDeviceToken = json_decode(file_get_contents('php://input'))->userDeviceToken;
+
+	if($currentUser && !in_array("church", $currentUser->roles)){
+		update_user_meta($userId, 'user_device_token', $userDeviceToken);
+
+		$response = [
+			"id" => $currentUser->id,
+			"firstName" => $currentUser->first_name,
+			"email" => $currentUser->user_email,
+			"userDeviceToken" => get_user_meta($currentUser->id, 'user_device_token', true)
+		];
+
+		return $response;
+	}else{
+		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
+	}
+
+}
+
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/devices', array(
+    'methods' => 'POST',
+    'callback' => 'saveUserDeviceToken',
+  ) );
+} );
