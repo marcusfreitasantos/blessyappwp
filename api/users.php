@@ -244,3 +244,22 @@ add_action( 'rest_api_init', function () {
     'callback' => 'saveUserDeviceToken',
   ) );
 } );
+
+
+function getUserNotifications($req){
+	$currentUser = get_user_by('id', $req['id']);
+	if($currentUser && !in_array('church', $currentUser->roles)){
+		$userNotifications = get_user_meta($req['id'], 'blessy_user_notifications', true);
+		return $userNotifications;
+
+	}else{
+		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
+	}
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/notifications', array(
+    'methods' => 'GET',
+    'callback' => 'getUserNotifications',
+  ) );
+} );
