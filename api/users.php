@@ -248,7 +248,7 @@ function getUserNotifications($req){
 	$currentUser = get_user_by('id', $req['id']);
 	if($currentUser && !in_array('church', $currentUser->roles)){
 		$userNotifications = get_user_meta($req['id'], 'blessy_user_notifications', true);
-		return $userNotifications;
+		return array_reverse($userNotifications);
 
 	}else{
 		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
