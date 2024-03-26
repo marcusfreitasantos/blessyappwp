@@ -20,7 +20,7 @@ function getAllChurches(){
               "id" => $church->id,
               "name" => $church->first_name,
               "address" => $churchAddress,
-              "logo" => $churchLogoUrl,
+              "logo" => $churchLogoUrl ? $churchLogoUrl : $churchLogoID,
               "totalFollowers" => $churchCurrentFollowers ? sizeof($churchCurrentFollowers) : 0
           ];  
       }
@@ -60,7 +60,7 @@ function getChurchById($reqData){
 			"name" => $currentChurch->first_name,
 			"address" => $churchAddress,
 			"description" => $churchDescription,
-			"logo" => $churchLogoUrl,
+			"logo" => $churchLogoUrl ? $churchLogoUrl : $churchLogoID,
 			"coverImg" => $churchCoverImg,
       "totalFollowers" => $churchCurrentFollowers ? sizeof($churchCurrentFollowers) : 0
 		];
@@ -212,7 +212,7 @@ function searchChurchByKeyword($req){
           "id" => $church->id,
           "name" => $church->first_name,
           "address" => $churchAddress,
-          "logo" => $churchLogoUrl
+          "logo" => $churchLogoUrl ? $churchLogoUrl : $churchLogoID
       ];
     }
 
@@ -284,7 +284,7 @@ function searchChurchByMetadata($req){
           "id" => $church->id,
           "name" => $church->first_name,
           "address" => $churchAddress,
-          "logo" => $churchLogoUrl
+          "logo" => $churchLogoUrl ? $churchLogoUrl : $churchLogoID
       ];
     }
 
