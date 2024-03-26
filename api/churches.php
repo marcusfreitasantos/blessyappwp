@@ -61,7 +61,7 @@ function getChurchById($reqData){
 			"address" => $churchAddress,
 			"description" => $churchDescription,
 			"logo" => $churchLogoUrl ? $churchLogoUrl : $churchLogoID,
-			"coverImg" => $churchCoverImg,
+			"coverImg" => $churchCoverImg ? $churchCoverImg : $churchCoverImgID,
       "totalFollowers" => $churchCurrentFollowers ? sizeof($churchCurrentFollowers) : 0
 		];
 	
