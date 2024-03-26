@@ -36,12 +36,12 @@ require_once("api/churches.php");
 
 
 
-function addChurchUserRoleOnUserRegistration($userId, $userdata){
+function addAuthorUserRoleOnUserRegistration($userId, $userdata){
 	$newUser = get_user_by('id', $userId);
 
-	if($newUser){
-		$newUser->add_role( 'church' );
+	if($newUser && in_array('church', $newUser->roles)){
+		$newUser->add_role( 'author' );
 	}
 }
 
-add_action('user_register', 'addChurchUserRoleOnUserRegistration', 10, 2);
+add_action('user_register', 'addAuthorUserRoleOnUserRegistration', 10, 2);
