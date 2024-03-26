@@ -45,3 +45,13 @@ function addAuthorUserRoleOnUserRegistration($userId, $feed, $entry, $form){
 }
 
 add_action('fluentform/user_registration_completed', 'addAuthorUserRoleOnUserRegistration', 10, 4);
+
+
+function changeUserRegisterUrl( $url ) {
+    if( is_admin() ) {
+    	return $url;
+    }
+    return '/cadastro-igreja/';
+}
+add_filter( 'register_url', 'changeUserRegisterUrl' );
+
