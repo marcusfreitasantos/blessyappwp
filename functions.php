@@ -36,7 +36,7 @@ require_once("api/churches.php");
 
 
 
-function addAuthorUserRoleOnUserRegistration($userId, $userdata){
+function addAuthorUserRoleOnUserRegistration($userId, $feed, $entry, $form){
 	$newUser = get_user_by('id', $userId);
 
 	if($newUser && in_array('church', $newUser->roles)){
@@ -44,4 +44,4 @@ function addAuthorUserRoleOnUserRegistration($userId, $userdata){
 	}
 }
 
-add_action('user_register', 'addAuthorUserRoleOnUserRegistration', 10, 2);
+add_action('fluentform/user_registration_completed', 'addAuthorUserRoleOnUserRegistration', 10, 4);
