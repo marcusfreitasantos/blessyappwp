@@ -55,3 +55,14 @@ function changeUserRegisterUrl( $url ) {
 }
 add_filter( 'register_url', 'changeUserRegisterUrl' );
 
+
+function userRestrictMediaLibrary(  $query ) {
+    $currentUser = wp_get_current_user();
+	if(!current_user_can('administrator')){
+		$query['author'] = $currentUser->ID ;
+	}
+    return $query;
+}
+add_filter( 'ajax_query_attachments_args', "userRestrictMediaLibrary" );
+
+
