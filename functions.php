@@ -57,12 +57,21 @@ add_filter( 'register_url', 'changeUserRegisterUrl' );
 
 
 function userRestrictMediaLibrary(  $query ) {
-    $currentUser = wp_get_current_user();
+    $currentUserId = get_current_user_id();
 	if(!current_user_can('administrator')){
-		$query['author'] = $currentUser->ID ;
+		$query['author'] = $currentUserId ;
 	}
     return $query;
 }
 add_filter( 'ajax_query_attachments_args', "userRestrictMediaLibrary" );
 
 
+
+function showUserOwnPosts($query) {
+    global $pagenow;
+    if (is_admin() && !current_user_can('administrator') && 'edit.php' === $pagenow) {
+        $currentUserId = get_current_user_id();
+        $query->set('author', $currentUserId);
+    }
+}
+add_action('pre_get_posts', 'showUserOwnPosts');
