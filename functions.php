@@ -33,3 +33,15 @@ add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_parent_style' );
 
 require_once("api/users.php");
 require_once("api/churches.php");
+
+
+
+function addChurchUserRoleOnUserRegistration($userId, $userdata){
+	$newUser = get_user_by('id', $userId);
+
+	if($newUser){
+		$newUser->add_role( 'church' );
+	}
+}
+
+add_action('user_register', 'addChurchUserRoleOnUserRegistration', 10, 2);
