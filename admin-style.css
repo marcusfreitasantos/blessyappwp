@@ -1,0 +1,14 @@
+#wp-admin-bar-root-default {
+  display: none;
+}
+
+#adminmenuwrap,
+#adminmenu,
+#adminmenu .wp-submenu,
+#wpadminbar {
+  background-color: #296d7c;
+}
+
+#adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
+  background-color: #296d7c;
+}

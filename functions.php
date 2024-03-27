@@ -31,6 +31,11 @@ function oceanwp_child_enqueue_parent_style() {
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_parent_style' );
 
 
+add_action( 'admin_enqueue_scripts', function(){
+	wp_enqueue_style( 'admin-custom', get_stylesheet_directory_uri() . '/admin-style.css' );
+} );
+
+
 require_once("api/users.php");
 require_once("api/churches.php");
 
