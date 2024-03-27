@@ -75,3 +75,27 @@ function showUserOwnPosts($query) {
     }
 }
 add_action('pre_get_posts', 'showUserOwnPosts');
+
+
+function hideMenuItemsForUsers(){
+	if(is_user_logged_in() && !current_user_can('administrator')){
+		
+		global $menu;
+	
+		$menuItemstoHide = [
+			"index.php",
+			"edit.php",
+			"edit-comments.php",
+			"tools.php"
+		];
+	
+		foreach($menu as $menuItem){
+			if(in_array($menuItem[2], $menuItemstoHide)){
+				remove_menu_page($menuItem[2]);
+			}
+		}
+	}
+}
+add_action( 'admin_menu', 'hideMenuItemsForUsers' );
+
+
