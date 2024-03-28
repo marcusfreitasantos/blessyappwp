@@ -1,5 +1,9 @@
-#wp-admin-bar-root-default {
+#wp-admin-bar-root-default li {
   display: none;
+}
+
+#wp-admin-bar-root-default #wp-admin-bar-wp-logo {
+  display: list-item !important;
 }
 
 #adminmenuwrap,
@@ -11,4 +15,24 @@
 
 #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
   background-color: #296d7c;
+}
+
+#wpadminbar #wp-admin-bar-wp-logo {
+  pointer-events: none;
+}
+
+#wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
+  background-image: url("assets/img/blessy_logo.svg");
+  background-repeat: no-repeat;
+  top: 2px;
+  background-size: 100px 40px;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  content: "";
+}
+
+#wpadminbar #wp-admin-bar-wp-logo > a.ab-item {
+  pointer-events: none;
+  cursor: default;
 }
