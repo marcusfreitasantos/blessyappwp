@@ -1,4 +1,19 @@
-#wp-admin-bar-root-default li {
+#wp-admin-bar-root-default li,
+.user-rich-editing-wrap,
+.user-admin-color-wrap,
+.user-comment-shortcuts-wrap,
+.user-admin-bar-front-wrap,
+.user-language-wrap,
+.user-user-login-wrap,
+.user-last-name-wrap,
+.user-nickname-wrap,
+.user-display-name-wrap,
+.user-url-wrap,
+.user-description-wrap,
+.user-profile-picture,
+.user-sessions-wrap,
+.application-passwords,
+#your-profile h2 {
   display: none;
 }
 
