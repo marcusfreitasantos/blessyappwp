@@ -105,13 +105,19 @@ function hideMenuItemsForUsers(){
 add_action( 'admin_menu', 'hideMenuItemsForUsers' );
 
 
-function redirectUserAfterLogin($redirectUrl, $request, $user){
-	$redirectUrl = '/wp-admin/edit.php?post_type=event';
-	if(!current_user_can('administrator')){
-		return $redirectUrl;
+function redirectUserAfterLogin( $redirectTo, $request, $user ) {
+	if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+		if ( in_array( 'administrator', $user->roles ) ) {
+			return admin_url();
+		} else {
+			return site_url() . '/wp-admin/edit.php?post_type=event';
+		}
+	} else {
+		return $redirectTo;
 	}
 }
-add_filter('login_redirect', 'redirectUserAfterLogin', 10, 3);
+
+add_filter( 'login_redirect', 'redirectUserAfterLogin', 10, 3 );
 
 
 
