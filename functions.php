@@ -105,3 +105,13 @@ function hideMenuItemsForUsers(){
 add_action( 'admin_menu', 'hideMenuItemsForUsers' );
 
 
+function redirectUserAfterLogin($redirectUrl, $request, $user){
+	$redirectUrl = '/wp-admin/edit.php?post_type=event';
+	if(!current_user_can('administrator')){
+		return $redirectUrl;
+	}
+}
+add_filter('login_redirect', 'redirectUserAfterLogin', 10, 3);
+
+
+
