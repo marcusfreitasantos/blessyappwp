@@ -9,7 +9,8 @@
 #adminmenuwrap,
 #adminmenu,
 #adminmenu .wp-submenu,
-#wpadminbar {
+#wpadminbar,
+#adminmenuback {
   background-color: #296d7c;
 }
 

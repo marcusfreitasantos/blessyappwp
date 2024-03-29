@@ -91,7 +91,8 @@ function hideMenuItemsForUsers(){
 			"index.php",
 			"edit.php",
 			"edit-comments.php",
-			"tools.php"
+			"tools.php",
+			"link-manager.php"
 		];
 	
 		foreach($menu as $menuItem){
