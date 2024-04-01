@@ -358,3 +358,35 @@ add_action( 'rest_api_init', function () {
 } );
 
 
+function getAllChurchAds(){
+  $churchAds = get_posts(array(
+    'post_type' => 'church_ad',
+    'post_status' => 'publish',
+    'numberposts'      => 5
+  ));
+
+  $formatedChurchesAds = [];
+
+  if($churchAds){
+    foreach($churchAds as $ad){      
+      $formatedChurchesAds[] = [
+          "bannerTitle" => $ad->post_title,
+          "bannerLink" => get_field('church_ad_banner_link',$ad->ID),
+          "bannerImg" => get_field('church_ad_banner_img', $ad->ID)
+      ];
+    };
+ 
+    return rest_ensure_response($formatedChurchesAds);
+  }else{
+    return new WP_Error( 'not_found', "No ads found.", array( 'status' => 404 ) );
+  }
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/church_ad', array(
+    'methods' => 'GET',
+    'callback' => 'getAllChurchAds',
+  ) );
+} );
+
+
+
