@@ -92,7 +92,8 @@ function hideMenuItemsForUsers(){
 			"edit.php",
 			"edit-comments.php",
 			"tools.php",
-			"edit.php?post_type=elementor_library"
+			"edit.php?post_type=elementor_library",
+			"edit.php?post_type=church_ad"
 		];
 	
 		foreach($menu as $menuItem){
