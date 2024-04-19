@@ -50,6 +50,21 @@ function getChurchById($reqData){
     $churchCity = get_user_meta($churchId, "church_city", true);
     $churchState = get_user_meta($churchId, "church_state", true);
 		$churchLogoID = get_user_meta($churchId, "church_logo", true);
+    $churchHours= get_user_meta($churchId, "church_hours", true);
+    $churchStaff= get_field("church_staff", "user_$churchId");
+    $churchContacts= get_field("church_contacts", "user_$churchId");
+    $churchSocialMedia= get_field("church_social_media", "user_$churchId");
+
+    $churchStaffGroup = [];
+
+
+    if($churchStaff){
+      foreach($churchStaff as $staff){
+        $churchStaffGroup[] = $staff;
+      }       
+    }
+
+
     $churchCurrentFollowers = get_user_meta($churchId, "church_current_followers", true);
 		$churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
 	
@@ -64,6 +79,10 @@ function getChurchById($reqData){
       "city" => $churchCity,
       "state" => $churchState,
 			"description" => $churchDescription,
+      "hours" => $churchHours,
+      "contact" => $churchContacts,
+      "staff" => $churchStaffGroup,
+      "socialMedia" => $churchSocialMedia,
 			"logo" => $churchLogoUrl ? $churchLogoUrl : $churchLogoID,
 			"coverImg" => $churchCoverImg ? $churchCoverImg : $churchCoverImgID,
       "totalFollowers" => $churchCurrentFollowers ? sizeof($churchCurrentFollowers) : 0
