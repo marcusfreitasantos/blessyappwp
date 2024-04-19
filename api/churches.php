@@ -47,6 +47,8 @@ function getChurchById($reqData){
 	if($currentChurch){
 		$churchDescription = get_user_meta($churchId, "church_description", true);
 		$churchAddress = get_user_meta($churchId, "church_address", true);
+    $churchCity = get_user_meta($churchId, "church_city", true);
+    $churchState = get_user_meta($churchId, "church_state", true);
 		$churchLogoID = get_user_meta($churchId, "church_logo", true);
     $churchCurrentFollowers = get_user_meta($churchId, "church_current_followers", true);
 		$churchLogoUrl = wp_get_attachment_image_url( $churchLogoID, "large" );
@@ -59,6 +61,8 @@ function getChurchById($reqData){
 			"id" => $churchId,
 			"name" => $currentChurch->first_name,
 			"address" => $churchAddress,
+      "city" => $churchCity,
+      "state" => $churchState,
 			"description" => $churchDescription,
 			"logo" => $churchLogoUrl ? $churchLogoUrl : $churchLogoID,
 			"coverImg" => $churchCoverImg ? $churchCoverImg : $churchCoverImgID,
