@@ -1,4 +1,5 @@
 <?php
+
 function registerUsersFromApp($req){
 	$userFullName = $req['userFullName'];
 	$username = generateUniqueUsername($req['username']);
@@ -259,5 +260,46 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/notifications', array(
     'methods' => 'GET',
     'callback' => 'getUserNotifications',
+  ) );
+} );
+
+
+function resetUserPassword(){
+	global $headers;
+	$reqBody = json_decode(file_get_contents('php://input'));
+	$user = get_user_by('email', $reqBody->userEmail);
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$passwordCharactersLength = 8;
+	$newUserRandomPassword = substr(str_shuffle($characters), 0, $passwordCharactersLength);
+	$subject = '[Blessy] Recuperação de senha';
+
+	$message = "
+		Olá $user->first_name,<br><br>
+		recebemos uma solicitação para alterar sua senha. Se não foi você, entre em contato com <a href='mailto:suporte@blessyapp.com'>nosso suporte.</a> <br><br>
+
+		Suas credenciais de acesso são: <br>
+		<strong>Login:</strong> $user->user_email<br>
+		<strong>Senha:</strong> $newUserRandomPassword<br><br>
+
+		Aconselhamos alterar a sua senha na próxima vez que entrar no app.
+
+		<p style='font-family: Helvetica, Arial, sans-serif; font-size: 13px;line-height: 1.5em;'>Atenciosamente,<br>
+		equipe Blessy.</p>
+	";
+	
+	if($user){
+		wp_set_password($newUserRandomPassword, $user->id);
+		wp_mail($reqBody->userEmail, $subject, $message, $headers);
+
+		return "New password is: $newUserRandomPassword";
+	}else{
+		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
+	}
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'blessyapp/v2', '/users/reset-password', array(
+    'methods' => 'POST',
+    'callback' => 'resetUserPassword',
   ) );
 } );

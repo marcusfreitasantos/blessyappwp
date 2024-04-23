@@ -36,6 +36,12 @@ add_action( 'admin_enqueue_scripts', function(){
 } );
 
 
+global $headers;
+$headers = array(
+	'Content-Type: text/html; charset=UTF-8',
+	'Reply-To: Blessy <suporte@blessyapp.com>',
+);
+
 require_once("api/users.php");
 require_once("api/churches.php");
 
