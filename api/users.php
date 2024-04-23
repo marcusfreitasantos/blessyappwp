@@ -274,17 +274,18 @@ function resetUserPassword(){
 	$subject = '[Blessy] Recuperação de senha';
 
 	$message = "
-		Olá $user->first_name,<br><br>
-		recebemos uma solicitação para alterar sua senha. Se não foi você, entre em contato com <a href='mailto:suporte@blessyapp.com'>nosso suporte.</a> <br><br>
+		Olá $user->first_name, recebemos uma solicitação para alterar sua senha. <br>
+		Se não foi você, entre em contato com <a href='mailto:suporte@blessyapp.com'>nosso suporte.</a> <br><br>
 
 		Suas credenciais de acesso são: <br>
 		<strong>Login:</strong> $user->user_email<br>
 		<strong>Senha:</strong> $newUserRandomPassword<br><br>
 
 		Aconselhamos alterar a sua senha na próxima vez que entrar no app.
+		<br><br>
 
-		<p style='font-family: Helvetica, Arial, sans-serif; font-size: 13px;line-height: 1.5em;'>Atenciosamente,<br>
-		equipe Blessy.</p>
+		Atenciosamente,<br>
+		equipe Blessy.
 	";
 	
 	if($user){
