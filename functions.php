@@ -133,7 +133,7 @@ function scheduleEmailReminderForChurches(){
   	]);
 
 	foreach($churchesFound as $church){
-		sendEmailReminderEveryWeek($church->first_name, $church->email);
+		sendEmailReminderEveryWeek($church->first_name, $church->user_email);
 	};
 }
 add_action('scheduleEmailReminderForChurchesHook', 'scheduleEmailReminderForChurches');
