@@ -145,8 +145,7 @@ function sendEmailReminderEveryWeek($userName, $userEmail){
 	$loginUrl = get_admin_url();
 
 	$message = "
-		Olá $userName, já publicou a Palavra da semana? Mantenha seus leitores sempre atualizados com apenas alguns cliques.<br>
-		Entre agora mesmo e comece a publicar seus conteúdos: <a href='$loginUrl'>Entrar agora.</a>
+		Olá $userName, já publicou a Palavra da semana? Mantenha seus leitores sempre atualizados com apenas alguns cliques. Entre agora mesmo e comece a publicar seus conteúdos: <a href='$loginUrl'>Entrar agora.</a>
 	
 		<br><br>
 		Se houver alguma dúvida, problema ou sugestão fique à vontade para nos enviar um email em: <a href='mailto:suporte@blessyapp.com'>suporte@blessyapp.com</a>.
