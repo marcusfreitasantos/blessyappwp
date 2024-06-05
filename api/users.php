@@ -58,7 +58,7 @@ function sendUserDataAfterJWTAuth($jwt, $user){
     $userAvatarUrl = wp_get_attachment_image_url( get_user_meta($user->ID, "avatar", true), "medium" );
 	$userBookmarks = get_user_meta($user->ID, 'user_bookmarked_churches', true);
 
-	if(!in_array('church', $user->roles)){
+	if($user){
 		$data = array(
 			'token' => $jwt['token'],
 			'userID' => $user->ID,
