@@ -58,8 +58,7 @@ function sendUserDataAfterJWTAuth($jwt, $user){
     $userAvatarUrl = wp_get_attachment_image_url( get_user_meta($user->ID, "avatar", true), "medium" );
 	$userBookmarks = get_user_meta($user->ID, 'user_bookmarked_churches', true);
 
-	if(!in_array('church', $user->roles)){
-		$data = array(
+	$data = array(
 			'token' => $jwt['token'],
 			'userID' => $user->ID,
 			'email' => $user->user_email,
@@ -68,10 +67,8 @@ function sendUserDataAfterJWTAuth($jwt, $user){
 			'avatar' => $userAvatarUrl,
 			'bookmarks' => $userBookmarks,
 		);
-		return $data;
-	}else{
-		return new WP_Error( 'forbidden', "User not allowed.", array( 'status' => 403 ) );
-	}
+	return $data;
+
 }
 add_filter('jwt_auth_token_before_dispatch', 'sendUserDataAfterJWTAuth', 10, 2);
 
