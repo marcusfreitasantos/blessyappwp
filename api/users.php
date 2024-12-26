@@ -2,6 +2,7 @@
 
 function registerUsersFromApp($req){
 	$userFullName = $req['userFullName'];
+	$userRole = $req['role'];
 	$username = generateUniqueUsername($req['username']);
 	$userPassword = $req['userPass'];
 	$userEmail = $req['userEmail'];
@@ -14,6 +15,13 @@ function registerUsersFromApp($req){
 			return new WP_Error( 'not_found', $errorMsg, array( 'status' => 401 ) );
 		
 		}else{
+			$newUser = get_user_by('id', $newUserId);
+
+			foreach($newUser->roles as $role){
+				$newUser->remove_role($role);
+			}
+
+			$newUser->add_role( $userRole );
 			wp_update_user( array( 'ID' => $newUserId, 'first_name' => $userFullName ) );
 			return "Success: User registered";
 		}
