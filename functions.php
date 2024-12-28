@@ -44,6 +44,8 @@ $headers = array(
 
 require_once("api/users.php");
 require_once("api/churches.php");
+require_once("api/news.php");
+require_once("api/routes.php");
 
 
 
@@ -65,51 +67,6 @@ function changeUserRegisterUrl( $url ) {
     return '/cadastro-igreja/';
 }
 add_filter( 'register_url', 'changeUserRegisterUrl' );
-
-
-function userRestrictMediaLibrary(  $query ) {
-    $currentUserId = get_current_user_id();
-	if(!current_user_can('administrator')){
-		$query['author'] = $currentUserId ;
-	}
-    return $query;
-}
-add_filter( 'ajax_query_attachments_args', "userRestrictMediaLibrary" );
-
-
-
-function showUserOwnPosts($query) {
-    global $pagenow;
-    if (is_admin() && !current_user_can('administrator') && 'edit.php' === $pagenow) {
-        $currentUserId = get_current_user_id();
-        $query->set('author', $currentUserId);
-    }
-}
-add_action('pre_get_posts', 'showUserOwnPosts');
-
-
-function hideMenuItemsForUsers(){
-	if(is_user_logged_in() && !current_user_can('administrator')){
-		
-		global $menu;
-	
-		$menuItemstoHide = [
-			"index.php",
-			"edit.php",
-			"edit-comments.php",
-			"tools.php",
-			"edit.php?post_type=elementor_library",
-			"edit.php?post_type=church_ad"
-		];
-	
-		foreach($menu as $menuItem){
-			if(in_array($menuItem[2], $menuItemstoHide)){
-				remove_menu_page($menuItem[2]);
-			}
-		}
-	}
-}
-add_action( 'admin_menu', 'hideMenuItemsForUsers' );
 
 
 function redirectUserAfterLogin( $redirectTo, $request, $user ) {

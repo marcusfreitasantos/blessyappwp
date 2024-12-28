@@ -31,12 +31,7 @@ function getAllChurches(){
     }
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church', array(
-    'methods' => 'GET',
-    'callback' => 'getAllChurches',
-  ) );
-} );
+
 
 
 
@@ -94,12 +89,7 @@ function getChurchById($reqData){
 	}
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)', array(
-    'methods' => 'GET',
-    'callback' => 'getChurchById',
-  ) );
-} );
+
 
 
 
@@ -151,12 +141,7 @@ function getChurchContent($reqData){
 }
 
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/content/(?P<content>[a-z]+)', array(
-    'methods' => 'GET',
-    'callback' => 'getChurchContent',
-  ) );
-} );
+
 
 
 
@@ -212,12 +197,7 @@ function getChurchSingleContent($reqData){
   }
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/content/(?P<content>[a-z]+)/(?P<post_id>\d+)', array(
-    'methods' => 'GET',
-    'callback' => 'getChurchSingleContent',
-  ) );
-} );
+
 
 
 function searchChurchByKeyword($req){
@@ -246,12 +226,6 @@ function searchChurchByKeyword($req){
   }
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/search/(?P<keyword>[a-zA-Z0-9]+)', array(
-    'methods' => 'GET',
-    'callback' => 'searchChurchByKeyword',
-  ) );
-} );
 
 
 
@@ -316,15 +290,8 @@ function searchChurchByMetadata($req){
   }else{
     return new WP_Error( 'not_found', "No churches found", array( 'status' => 404 ) );
   }
-
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/searchbymeta', array(
-    'methods' => 'GET',
-    'callback' => 'searchChurchByMetadata',
-  ) );
-} );
 
 
 function saveChurchFollowers($userId, $churchId){
@@ -373,12 +340,6 @@ function getAllChurchFollowers($req){
   }
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church/(?P<id>\d+)/followers', array(
-    'methods' => 'GET',
-    'callback' => 'getAllChurchFollowers',
-  ) );
-} );
 
 
 function getAllChurchAds(){
@@ -404,12 +365,6 @@ function getAllChurchAds(){
     return new WP_Error( 'not_found', "No ads found.", array( 'status' => 404 ) );
   }
 }
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/church_ad', array(
-    'methods' => 'GET',
-    'callback' => 'getAllChurchAds',
-  ) );
-} );
 
 
 

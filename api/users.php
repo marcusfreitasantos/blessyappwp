@@ -31,13 +31,6 @@ function registerUsersFromApp($req){
 
 
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users', array(
-    'methods' => 'POST',
-    'callback' => 'registerUsersFromApp',
-  ) );
-} );
-
 
 
 function generateUniqueUsername($username) {
@@ -69,6 +62,7 @@ function sendUserDataAfterJWTAuth($jwt, $user){
 	$data = array(
 			'token' => $jwt['token'],
 			'userID' => $user->ID,
+			'role' => $user->roles[0],
 			'email' => $user->user_email,
 			'firstName' => $user->first_name,
 			'lastName' => $user->last_name,
@@ -104,12 +98,7 @@ function updateUserById($req){
 	}
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)', array(
-    'methods' => 'POST',
-    'callback' => 'updateUserById',
-  ) );
-} );
+
 
 
 function getUserBookmarks($req){
@@ -147,12 +136,7 @@ function getUserBookmarks($req){
 }
 
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/bookmark', array(
-    'methods' => 'GET',
-    'callback' => 'getUserBookmarks',
-  ) );
-} );
+
 
 
 function saveUserBookmarks($req){
@@ -179,12 +163,6 @@ function saveUserBookmarks($req){
 }
 
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/bookmark', array(
-    'methods' => 'POST',
-    'callback' => 'saveUserBookmarks',
-  ) );
-} );
 
 
 function removeUserBookmarks($req){
@@ -211,12 +189,6 @@ function removeUserBookmarks($req){
 }
 
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/bookmark/(?P<church_id>\d+)', array(
-    'methods' => 'DELETE',
-    'callback' => 'removeUserBookmarks',
-  ) );
-} );
 
 
 function saveUserDeviceToken($req) {
@@ -242,12 +214,6 @@ function saveUserDeviceToken($req) {
 }
 
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/devices', array(
-    'methods' => 'POST',
-    'callback' => 'saveUserDeviceToken',
-  ) );
-} );
 
 
 function getUserNotifications($req){
@@ -260,13 +226,6 @@ function getUserNotifications($req){
 		return new WP_Error( 'not_found', "User not found.", array( 'status' => 404 ) );
 	}
 }
-
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/(?P<id>\d+)/notifications', array(
-    'methods' => 'GET',
-    'callback' => 'getUserNotifications',
-  ) );
-} );
 
 
 function resetUserPassword(){
@@ -303,9 +262,3 @@ function resetUserPassword(){
 	}
 }
 
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'blessyapp/v2', '/users/reset-password', array(
-    'methods' => 'POST',
-    'callback' => 'resetUserPassword',
-  ) );
-} );
