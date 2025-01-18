@@ -124,7 +124,7 @@ add_action( 'rest_api_init', function () {
 
   //NEWS ROUTES
   add_action( 'rest_api_init', function () {
-    register_rest_route( 'blessyapp/v2', '/news', array(
+    register_rest_route( 'blessyapp/v2', '/news/create', array(
       'methods' => 'POST',
       'callback' => 'createNews',
     ) );

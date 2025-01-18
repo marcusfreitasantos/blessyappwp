@@ -129,7 +129,8 @@ function getChurchContent($reqData){
           "churchId" => $post->post_author,
           "postDate" => customFormatDate($post->post_date),
           "postTitle" => $post->post_title,
-          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
+          "postExcerpt" => $post->post_excerpt,
+          "postContent" => $post->post_content
         ];
       }
     }
@@ -185,8 +186,9 @@ function getChurchSingleContent($reqData){
           "churchId" => $post->post_author,
           "postDate" => customFormatDate($post->post_date),
           "postTitle" => $post->post_title,
-          "postExcerpt" => sanitize_text_field(get_field('post_excerpt', $post->ID)),
+          "postExcerpt" => $post->post_excerpt,
           "postContent" => $paragraphs,
+          "singlePostContent" => $post->post_content
         ];
       }
 
