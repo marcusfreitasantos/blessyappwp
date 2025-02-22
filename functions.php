@@ -46,6 +46,7 @@ require_once("api/users.php");
 require_once("api/churches.php");
 require_once("api/news.php");
 require_once("api/routes.php");
+require_once("firebase-migration.php");
 
 
 
